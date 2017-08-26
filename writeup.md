@@ -72,7 +72,7 @@ gray_img=gaussian_blur(gray_img, kernel_size)
     `edges[edges_gray==255]=255`
     `edges[edges_U==255]=255`
 
-    <img src="./steps_images/10-combined_edges.jpg" alt="combined_edges" width="500">
+  <img src="./steps_images/10-combined_edges.jpg" alt="combined_edges" width="500">
 
 8- I applied the region of the interest on the image from step 7.
 
