@@ -5,52 +5,41 @@
 * Make a pipeline that finds lane lines on the road
 * Reflect on your work in a written report
 
-[//]: # (Image References)
-
-[image1]: ./steps_images/01-original.jpg "original"
-[image2]: ./steps_images/02-gray.jpg "gray"
-[image3]: ./steps_images/03-clipped_gray.jpg "clipped_gray"
-[image4]: ./steps_images/04-U_img.jpg "U_img"
-[image5]: ./steps_images/05-inverse_U_img.jpg "inverse_U_img"
-[image6]: ./steps_images/06-blured_gray_img.jpg "blured_gray_img"
-[image7]: ./steps_images/07-blured_U_img.jpg "blured_U_img"
-[image8]: ./steps_images/08-gray_img_edges.jpg "gray_img_edges"
-[image9]: ./steps_images/09-U_img_edges.jpg "U_img_edges"
-[image10]: ./steps_images/10-combined_edges.jpg "combined_edges"
-[image11]: ./steps_images/11-mask_edges.jpg "mask_edges"
-[image12]: ./steps_images/12-hogh_lines.jpg "hogh_lines"
-[image13]: ./steps_images/13-add_weighted.jpg "add_weighted"
 
 ---
-
 ### Reflection
 
 #### 1. Pipeline Description
 My pipeline consisted of 10 steps:
-![alt text][image1]
+
+<img src="./steps_images/01-original.jpg" alt="original" width="500">
 
 1- I converted the original photo to the grayscale.
 
 `gray_img=grayscale(image)`
-![alt text][image2]
+
+<img src="./steps_images/02-gray.jpg" alt="gray" width="500">
 
 2- I make any graylevel `< 200` in the gray image to be black to get the white color.
 
 `gray_img[gray_img<200]=0
 `
-![alt text][image3]
+
+<img src="./steps_images/03-clipped_gray.jpg" alt="clipped_gray" width="500">
 
 3- I converted the original photo to the U channel in YUV color space because the yellow color is dark in this channel and the white and black colors are gray so we can gat the yellow color easily.
 
 `U_img=U_channel(image)
 `
-![alt text][image4]
+
+<img src="./steps_images/04-U_img.jpg" alt="U_img" width="500">
 
 4- I invert the U channel to make the yellow color to be the light color.
 
 `U_img=255-U_img
 `
-![alt text][image5]
+
+<img src="./steps_images/05-inverse_U_img.jpg" alt="inverse_U_img" width="500">
 
 5- I used the gaussian blur to reduce the noise in the result images of step 2,4.
 
@@ -60,9 +49,10 @@ gray_img=gaussian_blur(gray_img, kernel_size)
 
 `
     U_img=gaussian_blur(U_img, kernel_size)`
-![alt text][image6]
 
-![alt text][image7]
+  <img src="./steps_images/06-blured_gray_img.jpg" alt="blured_gray_img" width="500">
+
+  <img src="./steps_images/07-blured_U_img.jpg" alt="blured_U_img" width="500">
 
 6- I used canny to get the edges in the result images of step 5.
 
@@ -71,22 +61,25 @@ gray_img=gaussian_blur(gray_img, kernel_size)
 
 `edges_U=canny(U_img, low_threshold_U, high_threshold_U)
 `
-![alt text][image8]
 
-![alt text][image9]
+<img src="./steps_images/08-gray_img_edges.jpg" alt="gray_img_edges" width="500">
+
+<img src="./steps_images/09-U_img_edges.jpg" alt="U_img_edges" width="500">
 
 7- I merged the 2 images from step 6 in one image.
 
 `edges= np.zeros_like(edges_gray)`
     `edges[edges_gray==255]=255`
     `edges[edges_U==255]=255`
-![alt text][image10]
+
+    <img src="./steps_images/10-combined_edges.jpg" alt="combined_edges" width="500">
 
 8- I applied the region of the interest on the image from step 7.
 
 `mask_edges=region_of_interest(edges, vertices)
 `
-![alt text][image11]
+
+<img src="./steps_images/11-mask_edges.jpg" alt="mask_edges" width="500">
 
 9- I applied the hough transform to the image from step 8.
 
@@ -105,13 +98,15 @@ Then I draw the 2 lanes.
 
 `line_img=hough_lines(mask_edges, rho, theta, threshold, min_line_len, max_line_gap)
 `
-![alt text][image12]
+
+<img src="./steps_images/12-hogh_lines.jpg" alt="hogh_lines" width="500">
 
 10- the last step I added the drawn lanes to the original image.
 
 `image=weighted_img(line_img,image, α, β, λ)
 `
-![alt text][image13]
+
+<img src="./steps_images/13-add_weighted.jpg" alt="add_weighted" width="500">
 
 
 #### 2. Potential shortcomings the current pipeline
